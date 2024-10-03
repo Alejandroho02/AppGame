@@ -18,10 +18,10 @@ public class Player : MonoBehaviour
         Vector3 movement = new Vector3();
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        movement.z -= horizontal;
-        movement.x = vertical;
+        movement.x = horizontal;
+        movement.z = vertical;
 
-        Rb.velocity = new Vector3(movement.x * Speed, Rb.velocity.y , movement.z * Speed);
+        Rb.velocity = new Vector3(movement.x * Speed, Rb.velocity.y, movement.z * Speed);
         
     }
 }
