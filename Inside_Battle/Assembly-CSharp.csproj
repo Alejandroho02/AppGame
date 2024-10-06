@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\CamaraScript.cs" />
+    <Compile Include="Assets\Scripts\Menu\Mainmenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
