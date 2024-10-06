@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{public float speed = 5f;            // Velocidad de movimiento
+{
+    
+      public float speed = 5f;            // Velocidad de movimiento
     public float runSpeed = 10f;        // Velocidad al correr
     public float mouseSensitivity = 2f; // Sensibilidad del ratón
 
@@ -12,9 +14,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        // Ocultar y bloquear el cursor
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        LockCursor(); // Bloquear el cursor al inicio del juego
     }
 
     void Update()
@@ -33,6 +33,12 @@ public class Player : MonoBehaviour
 
         // Rotación de la cámara y del jugador
         HandleMouseLook();
+
+        // Bloquear el cursor si está desbloqueado accidentalmente
+        if (Cursor.lockState != CursorLockMode.Locked)
+        {
+            LockCursor();
+        }
     }
 
     void HandleMouseLook()
@@ -52,5 +58,12 @@ public class Player : MonoBehaviour
 
         // Aplicar la rotación a la cámara
         playerCamera.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
+    }
+
+    // Método para bloquear y ocultar el cursor
+    void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked; // Bloquear el cursor en el centro de la pantalla
+        Cursor.visible = false; // Ocultar el cursor
     }
 }
