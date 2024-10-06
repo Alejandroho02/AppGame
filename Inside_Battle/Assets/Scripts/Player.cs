@@ -3,25 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
-{
-    public Rigidbody Rb;
-    public float Speed;
-    // Start is called before the first frame update
+{public float speed = 5f;            // Velocidad de movimiento
+    public float runSpeed = 10f;        // Velocidad al correr
+    public float mouseSensitivity = 2f; // Sensibilidad del ratón
+
+    private float rotationX = 0f;       // Rotación actual en el eje X (vertical)
+    public Transform playerCamera;      // La cámara del jugador
+
     void Start()
     {
-        Rb = GetComponent<Rigidbody>();
+        // Ocultar y bloquear el cursor
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Vector3 movement = new Vector3();
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        movement.x = horizontal;
-        movement.z = vertical;
+        // Movimiento del jugador
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-        Rb.velocity = new Vector3(movement.x * Speed, Rb.velocity.y, movement.z * Speed);
-        
+        Vector3 direction = transform.right * moveHorizontal + transform.forward * moveVertical;
+
+        // Cambiar entre caminar y correr
+        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : speed;
+
+        // Aplicar movimiento
+        transform.Translate(direction * currentSpeed * Time.deltaTime, Space.World);
+
+        // Rotación de la cámara y del jugador
+        HandleMouseLook();
+    }
+
+    void HandleMouseLook()
+    {
+        // Movimiento horizontal del ratón (girar el jugador)
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
+
+        // Movimiento vertical del ratón (mirar arriba/abajo)
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
+
+        // Aplicar la rotación horizontal al jugador
+        transform.Rotate(Vector3.up * mouseX);
+
+        // Limitar la rotación vertical de la cámara
+        rotationX -= mouseY;
+        rotationX = Mathf.Clamp(rotationX, -90f, 90f);
+
+        // Aplicar la rotación a la cámara
+        playerCamera.localRotation = Quaternion.Euler(rotationX, 0f, 0f);
     }
 }
